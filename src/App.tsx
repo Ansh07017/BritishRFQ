@@ -66,6 +66,7 @@ interface RFQ {
 
 interface Bid {
   id: number;
+  supplier_id: number;
   carrier_name: string;
   transit_time: string;
   validity: string;
@@ -1031,14 +1032,14 @@ const Dashboard = () => {
                         {user?.role === 'SUPPLIER' && (
                           <div className={cn(
                             "px-4 py-2 rounded-sm text-xs font-bold uppercase tracking-widest flex items-center gap-2",
-                            details.bids.some(b => b.carrier_name === user.company_name) 
+                            details.bids.some(b => b.supplier_id === user.id) 
                               ? "bg-royal-sapphire text-heritage-gold border border-heritage-gold shadow-md" 
                               : "bg-heritage-burgundy/10 text-heritage-burgundy border border-heritage-burgundy/20"
                           )}>
-                            {details.bids.some(b => b.carrier_name === user.company_name) ? (
+                            {details.bids.some(b => b.supplier_id === user.id) ? (
                               <>
                                 <UserIcon size={14} /> 
-                                My Rank: L{details.bids.find(b => b.carrier_name === user.company_name)?.rank}
+                                My Rank: L{details.bids.find(b => b.supplier_id === user.id)?.rank}
                               </>
                             ) : (
                               <>
@@ -1059,7 +1060,7 @@ const Dashboard = () => {
                       <table className="w-full text-left border-collapse">
                         <tbody className="divide-y divide-slate-50">
                           {details.bids.map((bid) => {
-                            const isMyBid = user?.role === 'SUPPLIER' && bid.carrier_name === user.company_name;
+                            const isMyBid = user?.role === 'SUPPLIER' && bid.supplier_id === user.id;
                             return (
                               <tr key={bid.id} className={cn(
                                 "transition-colors",
@@ -1102,7 +1103,7 @@ const Dashboard = () => {
                               </tr>
                             );
                           })}
-                          {user?.role === 'SUPPLIER' && !details.bids.some(b => b.carrier_name === user.company_name) && (
+                          {user?.role === 'SUPPLIER' && !details.bids.some(b => b.supplier_id === user.id) && (
                             <tr>
                               <td colSpan={6} className="p-16 text-center bg-slate-50/50">
                                 <ShieldAlert className="mx-auto text-heritage-burgundy/30 mb-4" size={48} />

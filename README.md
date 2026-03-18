@@ -119,10 +119,10 @@ npm run dev
 ## 🖼️ UI Previews
 
 ### Dashboard View
-![Dashboard View](https://via.placeholder.com/800x450.png?text=British+RFQ+Dashboard+Preview)
+![Dashboard View](assets/dashboard.png)
 
 ### Auction Details & Real-Time Bidding
-![Auction Details](https://via.placeholder.com/800x450.png?text=Real-Time+Auction+Interface)
+![Auction Details](assets/auction.png)
 
 ---
 
