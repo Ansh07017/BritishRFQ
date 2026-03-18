@@ -63,54 +63,60 @@ The system follows a modern asynchronous architecture:
 2.  **Database Strategy:** PostgreSQL handles relational data, while `JSONB` columns store flexible cost breakdowns, allowing for varied quoting structures without schema migrations.
 3.  **Concurrency Control:** Row-level locking and atomic updates ensure bid integrity during rapid-fire competition.
 4.  **Real-time Updates:** WebSocket integration provides instant feedback on bid rankings and auction status.
+   ---
+   ##  Architecture Diagram
    ```mermaid
- graph TD
-    %% Styling
-    classDef client fill:#f8fafc,stroke:#3b82f6,stroke-width:2px,color:#0f172a
-    classDef server fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#0f172a
-    classDef db fill:#fefce8,stroke:#eab308,stroke-width:2px,color:#0f172a
-    classDef engine fill:#eff6ff,stroke:#6366f1,stroke-width:3px,color:#0f172a
+ %%{init: {'theme': 'base', 'themeVariables': { 'lineColor': '#64748B'}}}%%
+graph LR
+    %% Theme: Royal Navy, Gold, Slate, and Crimson
+    classDef client fill:#0C1D36,stroke:#D4AF37,stroke-width:2px,color:#FFF,rx:6,ry:6
+    classDef gateway fill:#334155,stroke:#94A3B8,stroke-width:2px,color:#FFF
+    classDef service fill:#1E293B,stroke:#64748B,stroke-width:2px,color:#FFF,rx:6,ry:6
+    classDef engine fill:#7F1D1D,stroke:#FCA5A5,stroke-width:3px,color:#FFF,rx:8,ry:8
+    classDef db fill:#FDFBF7,stroke:#D4AF37,stroke-width:3px,color:#0C1D36,rx:10,ry:10
 
     subgraph Client_Tier [Client Tier - React SPA]
-        A[Buyer Dashboard]:::client
-        B[Supplier Dashboard]:::client
+        A[🖥️ Buyer Dashboard]:::client
+        B[🚚 Supplier Dashboard]:::client
     end
 
     subgraph Application_Tier [Application Tier - Node.js / Express]
-        C{Auth & RBAC Middleware}:::server
-        D[REST API Controllers]:::server
-        E((WebSocket Server)):::server
-        F[Auction Engine & Trigger Logic]:::engine
-        G[Background Scheduler Worker]:::server
+        C{🛡️ Auth & RBAC}:::gateway
+        
+        D[⚙️ API Controllers]:::service
+        E((📡 WebSockets)):::service
+        
+        F[⚡ Auction Engine]:::engine
+        G[⏱️ Cron Scheduler]:::service
     end
 
     subgraph Data_Tier [Data Tier - Supabase PostgreSQL]
-        H[(Users & RBAC)]:::db
-        I[(RFQs & State)]:::db
-        J[(Bids & Quotes)]:::db
-        K[(Activity Logs)]:::db
+        H[(👤 Users)]:::db
+        I[(📋 RFQs & State)]:::db
+        J[(💰 Bids)]:::db
+        K[(📝 Logs)]:::db
     end
 
-    %% Client to Server Connections
-    A -->|HTTP POST/GET| C
-    B -->|HTTP POST/GET| C
-    A -.->|wss:// Live Updates| E
-    B -.->|wss:// Live Updates| E
+    %% Client to App Flow
+    A -->|HTTP| C
+    B -->|HTTP| C
+    A -.->|wss:// Live Sync| E
+    B -.->|wss:// Live Sync| E
 
-    %% Internal Server Flow
-    C -->|Validated Request| D
-    D -->|Bid Submission| F
+    %% Internal App Flow
+    C -->|Validated| D
+    D -->|Bid Logic| F
 
-    %% Engine to Database (The critical path)
-    F -->|1. SELECT ... FOR UPDATE| I
-    F -->|2. INSERT New Bid| J
-    F -->|3. UPDATE Close Time| I
-    F -->|4. INSERT Audit Event| K
+    %% Engine to DB (The Critical Path)
+    F -->|1. Row Lock| I
+    F -->|2. Insert Bid| J
+    F -->|3. Update Time| I
+    F -->|4. Audit| K
 
-    %% Real-time & Schedulers
-    F -->|Broadcast Extension| E
-    G -->|Poll Expired Auctions| I
-    G -->|Broadcast Closure| E
+    %% Async & Background Tasks
+    F -.->|Broadcast Extension| E
+    G -->|Poll Expired| I
+    G -.->|Broadcast Close| E
 ```
 ---
 
