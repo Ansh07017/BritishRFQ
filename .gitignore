@@ -22,7 +22,7 @@ out/
 MANIFEST
 
 # Environment and Secrets
-.env
+.env.example
 .env.local
 .env.development.local
 .env.test.local
