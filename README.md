@@ -64,6 +64,54 @@ The system follows a modern asynchronous architecture:
 3.  **Concurrency Control:** Row-level locking and atomic updates ensure bid integrity during rapid-fire competition.
 4.  **Real-time Updates:** WebSocket integration provides instant feedback on bid rankings and auction status.
 
+graph TD
+    %% Styling
+    classDef client fill:#f8fafc,stroke:#3b82f6,stroke-width:2px,color:#0f172a
+    classDef server fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#0f172a
+    classDef db fill:#fefce8,stroke:#eab308,stroke-width:2px,color:#0f172a
+    classDef engine fill:#eff6ff,stroke:#6366f1,stroke-width:3px,color:#0f172a
+
+    subgraph Client_Tier [Client Tier - React SPA]
+        A[Buyer Dashboard]:::client
+        B[Supplier Dashboard]:::client
+    end
+
+    subgraph Application_Tier [Application Tier - Node.js / Express]
+        C{Auth & RBAC Middleware}:::server
+        D[REST API Controllers]:::server
+        E((WebSocket Server)):::server
+        F[Auction Engine & Trigger Logic]:::engine
+        G[Background Scheduler Worker]:::server
+    end
+
+    subgraph Data_Tier [Data Tier - Supabase PostgreSQL]
+        H[(Users & RBAC)]:::db
+        I[(RFQs & State)]:::db
+        J[(Bids & Quotes)]:::db
+        K[(Activity Logs)]:::db
+    end
+
+    %% Client to Server Connections
+    A -->|HTTP POST/GET| C
+    B -->|HTTP POST/GET| C
+    A -.->|wss:// Live Updates| E
+    B -.->|wss:// Live Updates| E
+
+    %% Internal Server Flow
+    C -->|Validated Request| D
+    D -->|Bid Submission| F
+
+    %% Engine to Database (The critical path)
+    F -->|1. SELECT ... FOR UPDATE| I
+    F -->|2. INSERT New Bid| J
+    F -->|3. UPDATE Close Time| I
+    F -->|4. INSERT Audit Event| K
+
+    %% Real-time & Schedulers
+    F -->|Broadcast Extension| E
+    G -->|Poll Expired Auctions| I
+    G -->|Broadcast Closure| E
+
 ---
 
 ## 🚀 Quickstart & Local Setup
