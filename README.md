@@ -63,8 +63,8 @@ The system follows a modern asynchronous architecture:
 2.  **Database Strategy:** PostgreSQL handles relational data, while `JSONB` columns store flexible cost breakdowns, allowing for varied quoting structures without schema migrations.
 3.  **Concurrency Control:** Row-level locking and atomic updates ensure bid integrity during rapid-fire competition.
 4.  **Real-time Updates:** WebSocket integration provides instant feedback on bid rankings and auction status.
-
-graph TD
+   ```mermaid
+ graph TD
     %% Styling
     classDef client fill:#f8fafc,stroke:#3b82f6,stroke-width:2px,color:#0f172a
     classDef server fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#0f172a
@@ -111,7 +111,7 @@ graph TD
     F -->|Broadcast Extension| E
     G -->|Poll Expired Auctions| I
     G -->|Broadcast Closure| E
-
+```
 ---
 
 ## 🚀 Quickstart & Local Setup
@@ -126,9 +126,8 @@ graph TD
 git clone https://github.com/your-org/british-rfq-system.git
 cd british-rfq-system
 
-# Set up Python Virtual Environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+# Set up Virtual Environment
+# On Windows: .venv\Scripts\activate
 
 # Install Backend Dependencies
 pip install -r requirements.txt
