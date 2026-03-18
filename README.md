@@ -87,8 +87,8 @@ Check out the full video presentation of the **British Auction RFQ System** on L
 ### 2. Repository Setup
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/british-rfq-system.git
-cd british-rfq-system
+git clone https://github.com/your-org/BritishRFQ.git
+cd BritishRFQ
 
 # Set up Python Virtual Environment
 python -m venv .venv
