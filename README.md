@@ -12,10 +12,11 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi" alt="FastAPI">
-  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express">
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
   <br>
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=flat-square" alt="Build Status">
@@ -46,10 +47,10 @@ The system is engineered with strict temporal constraints, including **Dynamic T
 
 | Layer | Technology |
 | :--- | :--- |
-| **Backend** | FastAPI (Python 3.10+), SQLAlchemy, Pydantic |
-| **Frontend** | React 18, Vite, Tailwind CSS, Framer Motion |
+| **Backend** | Node.js, Express, TypeScript |
+| **Frontend** | React 19, Vite, Tailwind CSS 4, Framer Motion |
 | **Database** | PostgreSQL with JSONB support |
-| **Real-time** | WebSockets for live bid broadcasting |
+| **Real-time** | WebSockets (ws) for live bid broadcasting |
 | **Icons** | Lucide React |
 
 ---
@@ -58,10 +59,10 @@ The system is engineered with strict temporal constraints, including **Dynamic T
 
 The system follows a modern asynchronous architecture:
 
-1.  **Async API Layer:** FastAPI handles high-concurrency bid submissions with minimal latency.
+1.  **Node.js API Layer:** Express handles high-concurrency bid submissions with minimal latency, written in Type-Safe TypeScript.
 2.  **Database Strategy:** PostgreSQL handles relational data, while `JSONB` columns store flexible cost breakdowns, allowing for varied quoting structures without schema migrations.
 3.  **Concurrency Control:** Row-level locking and atomic updates ensure bid integrity during rapid-fire competition.
-4.  **Background Schedulers:** A dedicated worker process monitors auction expiry, triggering closures and status transitions precisely.
+4.  **Real-time Updates:** WebSocket integration provides instant feedback on bid rankings and auction status.
 
 ---
 
@@ -80,24 +81,14 @@ Check out the full video presentation of the **British Auction RFQ System** on L
 ## 🚀 Quickstart & Local Setup
 
 ### 1. Prerequisites
-*   Python 3.10+
-*   Node.js 18+
+*   Node.js 20+
 *   PostgreSQL Instance
 
 ### 2. Repository Setup
 ```bash
 # Clone the repository
 git clone https://github.com/your-org/british-rfq-system.git
-cd british-rfq-system
-
-# Set up Python Virtual Environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install Backend Dependencies
-pip install -r requirements.txt
-
-# Install Frontend Dependencies
+# Install Dependencies
 npm install
 ```
 
@@ -105,16 +96,12 @@ npm install
 Create a `.env` file in the root directory:
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/rfq_db
-SECRET_KEY=your_royal_secret_key
-VITE_API_URL=http://localhost:8000
+JWT_SECRET=your_royal_secret_key
 ```
 
 ### 4. Launching the System
 ```bash
-# Start the Backend Server (FastAPI)
-uvicorn main:app --reload --port 8000
-
-# Start the Frontend Development Server (Vite)
+# Start the Development Server (Express + Vite)
 npm run dev
 ```
 
