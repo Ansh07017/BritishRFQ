@@ -66,18 +66,6 @@ The system follows a modern asynchronous architecture:
 
 ---
 
-## 🎥 Video Presentation
-
-Check out the full video presentation of the **British Auction RFQ System** on Loom:
-
-<p align="center">
-  <a href="https://www.loom.com/share/your_loom_video_id">
-    <img src="https://cdn.loom.com/sessions/thumbnails/your_loom_video_id-with-play.gif" alt="British Auction RFQ System Presentation" width="600">
-  </a>
-</p>
-
----
-
 ## 🚀 Quickstart & Local Setup
 
 ### 1. Prerequisites
