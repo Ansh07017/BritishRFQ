@@ -88,7 +88,16 @@ Check out the full video presentation of the **British Auction RFQ System** on L
 ```bash
 # Clone the repository
 git clone https://github.com/your-org/british-rfq-system.git
-# Install Dependencies
+cd british-rfq-system
+
+# Set up Python Virtual Environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install Backend Dependencies
+pip install -r requirements.txt
+
+# Install Frontend Dependencies
 npm install
 ```
 
